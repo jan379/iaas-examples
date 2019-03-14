@@ -1,0 +1,29 @@
+server {
+	listen       *:80;
+	server_name cloudstackers.de;
+	server_name www.cloudstackers.de;
+	server_name jira.cloudstackers.de;
+	location / {
+		return 301 https://www.cloudstackers.de;  # enforce https
+	}
+	location ~ "^/\.well-known/acme-challenge/" {
+		root	/srv/www/acme;
+	}
+
+}
+
+server {
+	listen 443 ssl;
+	server_name cloudstackers.de;
+	server_name www.cloudstackers.de;
+	server_name jira.cloudstackers.de;
+
+	ssl_certificate		/etc/letsencrypt/live/cloudstackers.de/fullchain.pem;
+	ssl_certificate_key	/etc/letsencrypt/live/cloudstackers.de/privkey.pem;
+
+	root     /srv/www/cloudstackers.de/html;
+
+	location / {
+		proxy_pass http://localhost:8080;
+	}
+}

@@ -1,0 +1,66 @@
+## /etc/letsencrypt/renewal/cloudstackers.de.conf
+cert = /etc/letsencrypt/live/cloudstackers.de/cert.pem
+privkey = /etc/letsencrypt/live/cloudstackers.de/privkey.pem
+chain = /etc/letsencrypt/live/cloudstackers.de/chain.pem
+fullchain = /etc/letsencrypt/live/cloudstackers.de/fullchain.pem
+
+# Options and defaults used in the renewal process
+[renewalparams]
+no_self_upgrade = False
+no_verify_ssl = False
+ifaces = None
+register_unsafely_without_email = False
+uir = None
+installer = none
+config_dir = /etc/letsencrypt
+text_mode = False
+staging = False
+dry_run = False
+work_dir = /var/lib/letsencrypt
+tos = False
+init = False
+http01_port = 80
+duplicate = False
+noninteractive_mode = False
+key_path = None
+nginx = False
+fullchain_path = /root/chain.pem
+email = j.peschke@syseleven.de
+csr = None
+agree_dev_preview = None
+redirect = None
+verbose_count = -3
+config_file = None
+renew_by_default = False
+hsts = False
+authenticator = standalone
+domains = cloudstackers.de,
+rsa_key_size = 2048
+verb = certonly
+checkpoints = 1
+manual_test_mode = False
+apache = False
+cert_path = /root/cert.pem
+webroot_path = ,
+reinstall = False
+expand = False
+strict_permissions = False
+account = ff56891b15be587e42bd08a7001ce78f
+prepare = False
+manual_public_ip_logging_ok = False
+chain_path = /root/chain.pem
+break_my_certs = False
+standalone = False
+manual = False
+server = https://acme-v01.api.letsencrypt.org/directory
+standalone_supported_challenges = "tls-sni-01,http-01"
+webroot = False
+os_packages_only = False
+func = <function obtain_cert at 0x7fb46e342c80>
+user_agent = None
+debug = False
+tls_sni_01_port = 443
+logs_dir = /var/log/letsencrypt
+configurator = None
+[[webroot_map]]
+
