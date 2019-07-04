@@ -1,0 +1,13 @@
+# This parameter file is configured to be used with a 30 Core / 120 GB RAM quota provided by iNNOVO GmbH.
+parameters:
+  public_network: provider
+  image: Ubuntu 18.04 Bionic Beaver - Latest
+
+  # Used resources can be configures with the following parameters
+  number_elasticsearch: 3
+  flavor_lb: m1.micro
+  flavor_elasticsearch: m1.small
+  # Please exchange the ssh public keys below with yours 
+  ssh_keys:
+    - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC161Lj6uDtuIwRjQKH9/LuR4FRNwCYTife+BuoDIuxioKfdPvHhRHL7GuAj+Qa7uG+83dfKek1Q6Gbjl82d254LPH720U7u1BG8uIFoFWM/ZE/+6kmykdf1LRPQUPa9K/xVoFI1gOJZgSm7EahcmBQeAWk+Zvge/Ttrbtln1kBTiUE/vKms4wF6TAapmFOXIToIlhsI7Wy/WO5uaL/ew7jq7ZVbJPu7l4w3lIt/Hb6zrwpIzPRxdMkDq5qm6ftwEZ1Wqml+TXBYRM69G8tpAaJt4GA7yzCbCJ/vfL4CDLpAhQ5AVBDAcVYCJZfZHayYoQW75+VfYYuyzLHb2GEvMgr jpeschke@Jans-MacBook-Pro.local'
+ 

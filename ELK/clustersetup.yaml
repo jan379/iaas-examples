@@ -1,0 +1,103 @@
+heat_template_version: pike 
+#
+# You can deploy this template using the following command:
+# 'openstack stack create -t clustersetup.yaml -e clustersetup-env.yaml <stack_name>'
+#
+
+description: A template to deploy and configure an ELK stack.
+
+parameters:
+  number_elasticsearch: 
+    type: string
+    default: 4
+  number_lb: 
+    type: string
+    default: 1
+  public_network:
+    type: string
+    default: provider
+  flavor_lb:
+    type: string
+    default: m1.micro
+    constraints:
+      - custom_constraint: nova.flavor
+  flavor_elasticsearch:
+    type: string
+    default: m1.micro
+    constraints:
+      - custom_constraint: nova.flavor
+  image: 
+    type: string
+    constraints:
+      - custom_constraint: glance.image
+  ssh_keys:
+    type: comma_delimited_list
+
+resources:
+
+  innovo_net:
+    type: OS::Neutron::Net
+    properties: 
+      name: innovo-net
+
+  innovo_subnet:
+    type: OS::Neutron::Subnet
+    depends_on: [ innovo_net ]
+    properties:
+      name: innovo_subnet
+      dns_nameservers:
+        - 8.8.8.8
+        - 8.8.4.4
+      network: {get_resource: innovo_net}
+      ip_version: 4
+      cidr: 192.168.2.0/24
+      allocation_pools:
+      - {start: 192.168.2.10, end: 192.168.2.250}
+
+  innovo_router:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info: {"network": { get_param: public_network }}
+
+  router_subnet_connect:
+    type: OS::Neutron::RouterInterface
+    depends_on: [ innovo_router, innovo_subnet ]
+    properties:
+      router: { get_resource: innovo_router }
+      subnet: { get_resource: innovo_subnet }
+
+  ### LB Node as resource group ###
+  #######################
+  lb_group:
+    type: OS::Heat::ResourceGroup
+    depends_on: [ router_subnet_connect ]
+    properties:
+      count: 1 
+      resource_def: 
+        type: lb.yaml
+        properties:
+          name: lb%index%
+          image: { get_param: image }
+          flavor: { get_param: flavor_lb }
+          innovo_net: { get_resource: innovo_net }
+          subnet: {get_resource: innovo_subnet}
+          public_network: { get_param: public_network }
+          ssh_keys: { get_param: ssh_keys }
+
+  ### Elasticsearch nodes as resource group ###
+  #######################
+  elasticsearch_group:
+    type: OS::Heat::ResourceGroup
+    depends_on: [ router_subnet_connect ]
+    properties:
+      count: { get_param: number_elasticsearch } 
+      resource_def: 
+        type: elasticsearch.yaml 
+        properties:
+          name: elasticsearch%index%
+          flavor: { get_param: flavor_elasticsearch }
+          image: { get_param: image }
+          innovo_net: { get_resource: innovo_net }
+          ssh_keys: { get_param: ssh_keys }
+
+outputs:
